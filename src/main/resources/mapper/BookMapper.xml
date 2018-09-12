@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnguiug.demo.dao.BookMapper">
+    <select id="listBook" resultType="com.hnguiug.demo.domain.Book">
+        select *
+        from book
+        <where>
+            1=1
+            <if test="bookAuthor!=null and bookAuthor!=''">
+                and book_author like "%"#{bookAuthor}"%"
+            </if>
+            <if test="bookName!=null and bookName!=''">
+                and book_name like "%"#{bookName}"%"
+            </if>
+        </where>
+    </select>
+
+    <insert id="add">
+        insert into book (book_name, book_price, book_author)
+        values (#{bookName}, #{bookPrice}, #{bookAuthor});
+    </insert>
+
+    <delete id="deleteByIds">
+        DELETE FROM book WHERE book_id in
+        <foreach item="idItem" collection="array" open="(" separator="," close=")">
+            #{idItem}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        update book
+        set book_author = #{bookAuthor},
+            book_name   = #{bookName},
+            book_price  = #{bookPrice}
+        where book_id = #{bookId};
+    </update>
+</mapper>
